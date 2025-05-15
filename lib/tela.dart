@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math'; // ✅ Importado para gerar token aleatório
+import 'dart:math';
 
 class UserSecureScreen extends StatefulWidget {
   const UserSecureScreen({super.key});
@@ -12,7 +12,7 @@ class UserSecureScreen extends StatefulWidget {
 class _UserSecureScreenState extends State<UserSecureScreen> {
   static const String emailKey = 'email';
   static const String passwordKey = 'password';
-  static const String tokenKey = 'token'; // ✅ Nova chave para armazenar o token
+  static const String tokenKey = 'token';
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -21,7 +21,7 @@ class _UserSecureScreenState extends State<UserSecureScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUserData(); // ✅ Carrega email/senha ao iniciar
+    _loadUserData();
   }
 
   void _loadUserData() async {
@@ -37,30 +37,27 @@ class _UserSecureScreenState extends State<UserSecureScreen> {
     await prefs.setString(emailKey, _emailController.text);
     await prefs.setString(passwordKey, _passwordController.text);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Dados salvos com sucesso!")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Dados salvos com sucesso!")));
   }
 
-  /// ✅ Simula um login com verificação de credenciais (email e senha)
   Future<String?> _loginWithCredentials(String email, String password) async {
-    // ✅ Credenciais válidas - você pode alterar para conectar com um backend real
     const validEmail = 'user@example.com';
     const validPassword = 'password123';
 
     if (email == validEmail && password == validPassword) {
-      // ✅ Se as credenciais forem válidas, gerar um token aleatório
       final token = await _generateToken();
-      return token; // ✅ Retorna o token gerado
+      return token;
     }
-    return null; // ✅ Caso contrário, retorna null
+    return null;
   }
 
-  /// ✅ Gera um token aleatório
   Future<String> _generateToken() async {
     final rand = Random();
-    final token = List.generate(32, (index) => rand.nextInt(36).toRadixString(36)).join();
-    return "token_$token"; // ✅ Retorna um token aleatório simulado
+    final token =
+        List.generate(32, (index) => rand.nextInt(36).toRadixString(36)).join();
+    return "token_$token";
   }
 
   void _handleLogin() async {
@@ -68,7 +65,6 @@ class _UserSecureScreenState extends State<UserSecureScreen> {
       final email = _emailController.text;
       final password = _passwordController.text;
 
-      // ✅ Validar as credenciais (email e senha)
       final token = await _loginWithCredentials(email, password);
 
       if (token != null) {
@@ -119,10 +115,7 @@ class _UserSecureScreenState extends State<UserSecureScreen> {
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _handleLogin, // ✅ Método de login corrigido
-                child: Text('Entrar'),
-              ),
+              ElevatedButton(onPressed: _handleLogin, child: Text('Entrar')),
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _saveUserData,
